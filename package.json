@@ -7,11 +7,14 @@
     "dev:client": "vite --host 0.0.0.0 --port 3000 --strictPort",
     "dev": "pnpm dev:client",
     "build:client": "vite build --outDir dist/static",
-    "build:step1": "if exist dist (rd /s /q dist) else (echo No dist folder to delete)",
+    "build:step1": "node scripts/clean-dist.js",
     "build:step2": "pnpm run build:client",
     "build:step3": "xcopy package.json dist /Y",
     "build:step4": "echo. > dist/build.flag",
     "build": "pnpm run build:step1 && pnpm run build:step2 && pnpm run build:step3 && pnpm run build:step4"
+  },
+  "engines": {
+    "pnpm": "10.14.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",
