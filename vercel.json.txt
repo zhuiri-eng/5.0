@@ -1,4 +1,10 @@
 {
   "output": "dist",
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "packageManager": "pnpm@10.14.0"
 }
