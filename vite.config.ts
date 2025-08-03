@@ -13,8 +13,6 @@ function getPlugins() {
 
 export default defineConfig({
   plugins: getPlugins(),
-<<<<<<< HEAD
-=======
   // 👇 新增构建输出目录配置，指定产物输出到 dist 文件夹，与 Vercel 部署适配
   build: {
     outDir: "dist", 
@@ -31,5 +29,4 @@ export default defineConfig({
   // 👇 若使用 React Router 等前端路由，可补充 base 配置（部署到非根路径时需要）
   // 比如部署到 https://xxx.vercel.app/my-app ，则 base: "/my-app/"
   // base: "/", 
->>>>>>> a5f6b871d0dfb5dfb2ac690e1913b6e9f3fe6ff7
 });
