@@ -1,24 +1,27 @@
+
 {
   "name": "project_template_react",
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "dev:client": "vite --host 0.0.0.0 --port 3000 --strictPort",
     "dev": "pnpm dev:client",
     "build:client": "vite build --outDir dist/static",
-<<<<<<< HEAD
-    "build": "rm -rf dist && pnpm build:client && cp package.json dist && touch dist/build.flag"
-=======
     "build:step1": "node scripts/clean-dist.js",
     "build:step2": "pnpm run build:client",
     "build:step3": "xcopy package.json dist /Y",
     "build:step4": "echo. > dist/build.flag",
-    "build": "pnpm run build:step1 && pnpm run build:step2 && pnpm run build:step3 && pnpm run build:step4"
+    "build": "pnpm run build:step1 && pnpm run build:step2 && pnpm run build:step3 && pnpm run build:step4",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "engines": {
     "pnpm": "10.14.0"
->>>>>>> a5f6b871d0dfb5dfb2ac690e1913b6e9f3fe6ff7
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -42,8 +45,4 @@
     "vite": "^6.2.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> a5f6b871d0dfb5dfb2ac690e1913b6e9f3fe6ff7
