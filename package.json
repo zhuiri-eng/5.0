@@ -14,14 +14,14 @@
     "build:step3": "mkdir -p dist && cp package.json dist",
     "build:step4": "touch > dist/build.flag",
     "build": "pnpm run build:step1 && pnpm run build:step2 && pnpm run build:step3 && pnpm run build:step4",
-    "build:netlify": "vite build",
+    "build:netlify": "npm install && vite build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "engines": {
-    "pnpm": "10.14.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",
