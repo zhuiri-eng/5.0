@@ -98,7 +98,7 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
                       <div className="text-xl font-bold mb-1">{element.name}</div>
                       <div className="w-full bg-gray-600 rounded-full h-2 mb-1">
                         <div 
-                          className={`h-2 rounded-full ${
+                          className={`h-2 rounded-full transition-all duration-300 ${
                             element.name === '金' ? 'bg-gray-300' : 
                             element.name === '木' ? 'bg-green-500' :
                             element.name === '水' ? 'bg-blue-500' :
@@ -107,7 +107,7 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
                           style={{ width: `${element.value}%` }}
                         ></div>
                       </div>
-                      <div className="text-sm text-gray-400">{element.value}%</div>
+                      <div className="text-sm text-gray-400 font-medium">{element.value}%</div>
                     </div>
                   ))}
                 </div>

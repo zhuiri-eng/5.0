@@ -19,9 +19,14 @@ export const calculateFiveElements = (birthDate: string, birthHour: number) => {
     const hourFactor = (birthHour % 12) * (i + 1);
     const randomSeed = (baseValue + hourFactor) % 1000;
     
-    // 使用正弦函数生成更自然的波动范围(15-85)
-    const value = Math.abs(Math.sin(randomSeed / 10) * 70) + 15;
-    return Math.round(value);
+    // 使用更复杂的算法生成更自然的波动范围(20-95)
+    const sinValue = Math.sin(randomSeed / 10);
+    const cosValue = Math.cos(randomSeed / 15);
+    const combinedValue = (sinValue + cosValue) / 2;
+    const value = Math.abs(combinedValue * 75) + 20;
+    
+    // 确保值在合理范围内
+    return Math.min(95, Math.max(20, Math.round(value)));
   });
   
   return elements.map((element, index) => ({
