@@ -39,4 +39,6 @@
 
 - 项目已配置 SPA 重定向规则，支持 React Router
 - 构建输出目录为 `dist`
-- Node.js 版本设置为 18 
+- Node.js 版本设置为 18
+- 使用 npm 进行依赖安装和构建，避免 pnpm 版本兼容性问题
+- 构建命令：`npm run build:netlify`（自动安装依赖并构建） 
