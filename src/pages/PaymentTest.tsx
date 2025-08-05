@@ -9,22 +9,33 @@ const PaymentTest: React.FC = () => {
     const debugData = debugPaymentParams(selectedPaymentType);
 
     const debugText = `
-=== 支付调试信息 ===
-订单号: ${debugData.orderId}
-金额: ${debugData.amount}
-支付类型: ${debugData.paymentType}
+=== 码支付调试信息 ===
 
-参数:
-${JSON.stringify(debugData.params, null, 2)}
+订单信息:
+- 订单号: ${debugData.orderId}
+- 支付金额: ¥${debugData.amount}
+- 支付方式: ${debugData.paymentType}
 
-签名字符串:
-${debugData.signString}
+支付参数:
+${Object.entries(debugData.params).map(([key, value]) => `- ${key}: ${value}`).join('\n')}
 
-生成的签名:
-${debugData.sign}
+签名生成:
+- 签名字符串: ${debugData.signString}
+- 最终签名: ${debugData.sign}
 
 完整URL:
 ${debugData.fullUrl}
+
+=== 调试说明 ===
+1. 检查签名字符串是否按字母顺序排序
+2. 确认所有参数值不为空
+3. 验证MD5算法是否正确
+4. 检查最终签名是否为大写
+
+如果签名校验失败，请检查:
+- PID和KEY是否正确
+- 参数值是否包含特殊字符
+- 签名字符串格式是否符合要求
     `;
 
     setDebugInfo(debugText);
