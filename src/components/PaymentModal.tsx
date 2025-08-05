@@ -64,10 +64,10 @@ const PaymentModal: React.FC = () => {
                           <i className="fa-solid fa-check text-green-400 mr-2"></i>
                           <span>专业命理指导</span>
                         </div>
-                        <div className="flex items-center mt-3 pt-3 border-t border-gray-600">
-                          <i className="fa-solid fa-info-circle text-blue-400 mr-2"></i>
-                          <span className="text-blue-400 font-medium">每次付费可查询1次报告</span>
-                        </div>
+                                                 <div className="flex items-center mt-3 pt-3 border-t border-gray-600">
+                           <i className="fa-solid fa-info-circle text-blue-400 mr-2"></i>
+                           <span className="text-blue-400 font-medium">每次付费可查看1次完整报告</span>
+                         </div>
                       </div>
         </div>
 

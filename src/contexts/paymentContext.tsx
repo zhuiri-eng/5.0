@@ -25,6 +25,7 @@ interface PaymentContextType {
   canQuery: () => boolean;
   useQuery: () => boolean;
   remainingQueries: number;
+  setPaidStatus: (paid: boolean) => void;
 }
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
@@ -107,10 +108,11 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
             const newStatus = getQueryStatus();
             setQueryStatus(newStatus);
             setIsPaid(true);
+            localStorage.setItem('metaphysics_paid', 'true');
             
             localStorage.removeItem('current_order');
             setShowPaymentModal(false);
-            alert('支付成功！您现在可以查询一次玄学命理报告。');
+            alert('支付成功！您现在可以查看完整报告。');
           }
         }
       } catch (error) {
@@ -137,7 +139,15 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
     queryStatus,
     canQuery,
     useQuery,
-    remainingQueries: queryStatus.remainingQueries
+    remainingQueries: queryStatus.remainingQueries,
+    setPaidStatus: (paid: boolean) => {
+      setIsPaid(paid);
+      if (paid) {
+        localStorage.setItem('metaphysics_paid', 'true');
+      } else {
+        localStorage.removeItem('metaphysics_paid');
+      }
+    }
   };
 
   return (

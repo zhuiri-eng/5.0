@@ -4,7 +4,6 @@ import { toast } from 'sonner';
 import { calculateFiveElements, generateFortune, generateProfessionalAdvice, generateSpecialInsights } from '@/lib/metaphysics';
 import { usePayment } from '@/contexts/paymentContext';
 import PaymentModal from '@/components/PaymentModal';
-import PaywallBanner from '@/components/PaywallBanner';
 
 
 interface MetaphysicsReportProps {
@@ -13,7 +12,7 @@ interface MetaphysicsReportProps {
 
 export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps) {
   const navigate = useNavigate();
-  const { isPaid } = usePayment();
+  const { isPaid, canQuery, useQuery, setShowPaymentModal, setPaidStatus } = usePayment();
   
   useEffect(() => {
     // 如果没有报告数据，重定向到表单页面
@@ -88,7 +87,7 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
               </div>
             </div>
             
-            {/* 基本命格分析 */}
+            {/* 基本命格分析 - 免费预览 */}
             <div className="mb-10">
               <h2 className="text-2xl font-bold mb-4 flex items-center">
                 <i className="fa-solid fa-circle-info text-yellow-400 mr-3"></i>基本命格分析
@@ -164,24 +163,30 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
               <div>
                 <h3 className="text-lg font-semibold mb-3 text-gray-300">性格特质</h3>
                 <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-gray-300">
-                   <p>{personality.description}</p>
+                   <p>{personality.description.substring(0, Math.floor(personality.description.length * 0.1))}...</p>
                    <p className="mt-2">您的命局中{personality.dominantElement}元素最为旺盛，这使您在人群中具有独特的{personality.dominantElement === '金' ? '决断力' : personality.dominantElement === '木' ? '创造力' : personality.dominantElement === '水' ? '洞察力' : personality.dominantElement === '火' ? '感染力' : '稳重性'}。若能善用这一天赋，将在事业和人际关系中获得显著优势。</p>
                 </div>
               </div>
               
-              {/* 付费限制 - 未付费用户只能看到10%的内容 */}
+              {/* 付费墙 - 未付费用户只能看到10%的内容 */}
               {!isPaid && (
                 <div className="mt-6">
-                  <PaywallBanner />
                   <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-gray-300">
                     <div className="text-center py-8">
                       <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i className="fa-solid fa-lock text-2xl text-yellow-400"></i>
                       </div>
                       <h3 className="text-xl font-semibold text-white mb-2">解锁完整报告</h3>
-                      <p className="text-gray-400 mb-4">您当前只能查看基础信息，付费后可查看详细的运势展望、专业建议等完整内容</p>
+                      <p className="text-gray-400 mb-4">您当前只能查看基础信息，付费后可查看详细的性格特质、运势展望、专业建议等完整内容</p>
                       <button
-                        onClick={() => setShowPaymentModal(true)}
+                        onClick={() => {
+                          if (canQuery()) {
+                            useQuery();
+                            setPaidStatus(true);
+                          } else {
+                            setShowPaymentModal(true);
+                          }
+                        }}
                         className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200"
                       >
                         <i className="fa-solid fa-crown mr-2"></i>

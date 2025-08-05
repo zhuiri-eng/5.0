@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { usePayment } from '@/contexts/paymentContext';
 
 interface ReportFormProps {
   generateReport: (data: { name: string; birthDate: string; gender: string }) => any;
@@ -9,7 +8,6 @@ interface ReportFormProps {
 
 export default function ReportForm({ generateReport }: ReportFormProps) {
   const navigate = useNavigate();
-  const { canQuery, useQuery, remainingQueries, setShowPaymentModal } = usePayment();
   const [formData, setFormData] = useState({
     name: '',
     birthDate: '',
@@ -25,13 +23,6 @@ export default function ReportForm({ generateReport }: ReportFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // 检查查询权限
-    if (!canQuery()) {
-      toast.error('您需要先付费才能查询玄学命理报告');
-      setShowPaymentModal(true);
-      return;
-    }
-    
     // 表单验证
     if (!formData.name.trim()) {
       toast.error('请输入您的姓名');
@@ -46,16 +37,10 @@ export default function ReportForm({ generateReport }: ReportFormProps) {
     setIsLoading(true);
     
     try {
-      // 使用一次查询
-      if (useQuery()) {
-        // 生成报告并导航到报告页面
-        generateReport(formData);
-        navigate('/metaphysics-report');
-        toast.success(`查询成功！您还有 ${remainingQueries - 1} 次查询机会`);
-      } else {
-        toast.error('查询次数已用完，请重新付费');
-        setShowPaymentModal(true);
-      }
+      // 生成报告并导航到报告页面
+      generateReport(formData);
+      navigate('/metaphysics-report');
+      toast.success('报告生成成功！');
     } catch (error) {
       toast.error('生成报告时出错，请重试');
       console.error('Report generation error:', error);
@@ -83,29 +68,7 @@ export default function ReportForm({ generateReport }: ReportFormProps) {
               <i className="fa-solid fa-pen-to-square text-yellow-400 mr-2"></i>个人信息输入
             </h1>
             
-            {/* 查询状态显示 */}
-            <div className="mb-6 p-4 bg-gray-700/30 rounded-lg border border-gray-600">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <i className="fa-solid fa-search text-blue-400 mr-2"></i>
-                  <span className="text-gray-300">查询状态</span>
-                </div>
-                <div className="text-right">
-                  {canQuery() ? (
-                    <div className="text-green-400 font-semibold">
-                      剩余查询次数: {remainingQueries}
-                    </div>
-                  ) : (
-                    <div className="text-red-400 font-semibold">
-                      需要付费查询
-                    </div>
-                  )}
-                </div>
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                每次付费可查询 {remainingQueries > 0 ? remainingQueries : 1} 次玄学命理报告
-              </p>
-            </div>
+
             
             <form onSubmit={handleSubmit} className="space-y-6">
                <div>
