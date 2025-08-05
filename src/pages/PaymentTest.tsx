@@ -1,59 +1,68 @@
 import React, { useState } from 'react';
-import { PAYMENT_CONFIG, generateOrderId, generateSign, md5, buildPaymentUrl } from '@/lib/paymentConfig';
+import { PAYMENT_CONFIG, debugPaymentParams } from '@/lib/paymentConfig';
 
 const PaymentTest: React.FC = () => {
   const [debugInfo, setDebugInfo] = useState<string>('');
+  const [selectedPaymentType, setSelectedPaymentType] = useState<'alipay' | 'wechat' | 'qq'>('alipay');
 
   const testPayment = () => {
-    const orderId = generateOrderId();
-    const amount = PAYMENT_CONFIG.PRICE;
-    const paymentType = 'alipay';
-
-    const paymentParams = {
-      pid: PAYMENT_CONFIG.PID,
-      type: paymentType,
-      out_trade_no: orderId,
-      notify_url: PAYMENT_CONFIG.NOTIFY_URL,
-      return_url: PAYMENT_CONFIG.RETURN_URL,
-      name: PAYMENT_CONFIG.PRODUCT_NAME,
-      money: amount.toFixed(2),
-      sitename: PAYMENT_CONFIG.SITE_NAME
-    };
-
-    // 生成签名
-    const signStr = generateSign(paymentParams, PAYMENT_CONFIG.KEY);
-    const sign = md5(signStr);
+    const debugData = debugPaymentParams(selectedPaymentType);
 
     const debugText = `
 === 支付调试信息 ===
-订单号: ${orderId}
-金额: ${amount}
-支付类型: ${paymentType}
+订单号: ${debugData.orderId}
+金额: ${debugData.amount}
+支付类型: ${debugData.paymentType}
 
 参数:
-${JSON.stringify(paymentParams, null, 2)}
+${JSON.stringify(debugData.params, null, 2)}
 
 签名字符串:
-${signStr}
+${debugData.signString}
 
 生成的签名:
-${sign}
+${debugData.sign}
 
 完整URL:
-${PAYMENT_CONFIG.API_URL}submit.php?${new URLSearchParams({
-      ...paymentParams,
-      sign: sign
-    }).toString()}
+${debugData.fullUrl}
     `;
 
     setDebugInfo(debugText);
-    console.log('支付调试信息:', debugText);
+    console.log('支付调试信息:', debugData);
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">支付调试页面</h1>
+        
+        {/* 支付方式选择 */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold mb-3">选择支付方式</h3>
+          <div className="flex space-x-4">
+            {Object.entries(PAYMENT_CONFIG.PAYMENT_METHODS).map(([id, method]) => (
+              <label
+                key={id}
+                className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                  selectedPaymentType === id
+                    ? 'border-blue-500 bg-blue-500/10'
+                    : 'border-gray-600 bg-gray-700/30 hover:border-gray-500'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="paymentType"
+                  value={id}
+                  checked={selectedPaymentType === id}
+                  onChange={(e) => setSelectedPaymentType(e.target.value as 'alipay' | 'wechat' | 'qq')}
+                  className="sr-only"
+                />
+                <i className={`${method.icon} text-xl ${method.color} mr-2`}></i>
+                <span className="text-white font-medium">{method.name}</span>
+              </label>
+            ))}
+          </div>
+        </div>
         
         <button
           onClick={testPayment}
