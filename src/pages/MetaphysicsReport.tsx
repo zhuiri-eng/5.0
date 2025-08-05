@@ -310,7 +310,6 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
                  </div>
                </div>
              )}
-            </div>
             
             {/* 免责声明 */}
             <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-sm text-gray-400 italic">

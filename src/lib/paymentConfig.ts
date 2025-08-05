@@ -12,7 +12,7 @@ export const PAYMENT_CONFIG = {
   // 商品信息
   PRODUCT_NAME: '玄学命理报告',
   SITE_NAME: '玄学命理分析平台',
-  PRICE: 29.9,
+  PRICE: 19.9,
   
   // 支付方式配置
   PAYMENT_METHODS: {
