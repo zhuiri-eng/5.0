@@ -5,6 +5,7 @@ import { generateMetaphysicsReport } from "@/lib/metaphysics";
 import MetaphysicsReport from "@/pages/MetaphysicsReport";
 import { useState } from "react";
 import { AuthContext } from '@/contexts/authContext';
+import { PaymentProvider } from '@/contexts/paymentContext';
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -30,12 +31,14 @@ export default function App() {
     <AuthContext.Provider
       value={{ isAuthenticated, setIsAuthenticated, logout }}
     >
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/report-form" element={<ReportForm generateReport={generateReport} />} />
-        <Route path="/metaphysics-report" element={<MetaphysicsReport reportData={reportData} />} />
-        <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
-      </Routes>
+      <PaymentProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/report-form" element={<ReportForm generateReport={generateReport} />} />
+          <Route path="/metaphysics-report" element={<MetaphysicsReport reportData={reportData} />} />
+          <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
+        </Routes>
+      </PaymentProvider>
     </AuthContext.Provider>
   );
 }

@@ -2,6 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 import { calculateFiveElements, generateFortune, generateProfessionalAdvice, generateSpecialInsights } from '@/lib/metaphysics';
+import { usePayment } from '@/contexts/paymentContext';
+import PaymentModal from '@/components/PaymentModal';
+import PaywallBanner from '@/components/PaywallBanner';
 
 
 interface MetaphysicsReportProps {
@@ -10,6 +13,7 @@ interface MetaphysicsReportProps {
 
 export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps) {
   const navigate = useNavigate();
+  const { isPaid } = usePayment();
   
   useEffect(() => {
     // 如果没有报告数据，重定向到表单页面
@@ -164,92 +168,151 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
                    <p className="mt-2">您的命局中{personality.dominantElement}元素最为旺盛，这使您在人群中具有独特的{personality.dominantElement === '金' ? '决断力' : personality.dominantElement === '木' ? '创造力' : personality.dominantElement === '水' ? '洞察力' : personality.dominantElement === '火' ? '感染力' : '稳重性'}。若能善用这一天赋，将在事业和人际关系中获得显著优势。</p>
                 </div>
               </div>
+              
+              {/* 付费限制 - 未付费用户只能看到10%的内容 */}
+              {!isPaid && (
+                <div className="mt-6">
+                  <PaywallBanner />
+                  <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-gray-300">
+                    <div className="text-center py-8">
+                      <div className="w-16 h-16 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i className="fa-solid fa-lock text-2xl text-yellow-400"></i>
+                      </div>
+                      <h3 className="text-xl font-semibold text-white mb-2">解锁完整报告</h3>
+                      <p className="text-gray-400 mb-4">您当前只能查看基础信息，付费后可查看详细的运势展望、专业建议等完整内容</p>
+                      <button
+                        onClick={() => {
+                          const { setShowPaymentModal } = usePayment();
+                          setShowPaymentModal(true);
+                        }}
+                        className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                      >
+                        <i className="fa-solid fa-crown mr-2"></i>
+                        立即解锁完整报告
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             
             {/* 运势展望 */}
-            <div className="mb-10">
-              <h2 className="text-2xl font-bold mb-4 flex items-center">
-                <i className="fa-solid fa-compass text-yellow-400 mr-3"></i>运势展望
-              </h2>
-              
-              <div className="bg-gradient-to-r from-gray-700/40 to-gray-800/40 border border-gray-600 rounded-lg p-5 text-gray-300">
-                <div className="flex items-start mb-4">
-                  <div className="bg-yellow-500/20 p-2 rounded-full mr-4 mt-1">
-                    <i className="fa-solid fa-sun text-yellow-400"></i>
+            {isPaid ? (
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold mb-4 flex items-center">
+                  <i className="fa-solid fa-compass text-yellow-400 mr-3"></i>运势展望
+                </h2>
+                
+                <div className="bg-gradient-to-r from-gray-700/40 to-gray-800/40 border border-gray-600 rounded-lg p-5 text-gray-300">
+                  <div className="flex items-start mb-4">
+                    <div className="bg-yellow-500/20 p-2 rounded-full mr-4 mt-1">
+                      <i className="fa-solid fa-sun text-yellow-400"></i>
+                    </div>
+                    <div>
+                       <h3 className="text-lg font-semibold mb-2 text-white">近期运势</h3>
+                       <p>{fortune.recent}</p>
+                     </div>
+                   </div>
+                   
+                   <div className="flex items-start mt-6">
+                     <div className="bg-blue-500/20 p-2 rounded-full mr-4 mt-1">
+                       <i className="fa-solid fa-moon text-blue-400"></i>
+                     </div>
+                     <div>
+                       <h3 className="text-lg font-semibold mb-2 text-white">未来趋势</h3>
+                       <p>{fortune.future}</p>
+                     </div>
                   </div>
-                  <div>
-                     <h3 className="text-lg font-semibold mb-2 text-white">近期运势</h3>
-                     <p>{fortune.recent}</p>
-                   </div>
-                 </div>
-                 
-                 <div className="flex items-start mt-6">
-                   <div className="bg-blue-500/20 p-2 rounded-full mr-4 mt-1">
-                     <i className="fa-solid fa-moon text-blue-400"></i>
-                   </div>
-                   <div>
-                     <h3 className="text-lg font-semibold mb-2 text-white">未来趋势</h3>
-                     <p>{fortune.future}</p>
-                   </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="mb-10">
+                <h2 className="text-2xl font-bold mb-4 flex items-center">
+                  <i className="fa-solid fa-compass text-yellow-400 mr-3"></i>运势展望
+                </h2>
+                <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-gray-300">
+                  <div className="text-center py-6">
+                    <div className="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <i className="fa-solid fa-lock text-lg text-yellow-400"></i>
+                    </div>
+                    <p className="text-gray-400">付费后可查看详细的运势分析</p>
+                  </div>
+                </div>
+              </div>
+            )}
             
              {/* 建议和启示 */}
-             <div className="mb-10">
-               <h2 className="text-2xl font-bold mb-4 flex items-center">
-                 <i className="fa-solid fa-lightbulb text-yellow-400 mr-3"></i>建议和启示
-               </h2>
-               
-               {/* 生成专业建议 */}
-               {(() => {
-                 const advice = generateProfessionalAdvice(
-                   basicInfo.gender, 
-                   personality.dominantElement, 
-                   basicInfo.birthDate
-                 );
-                 return (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                     <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
-                       <div className="text-center mb-3">
-                         <i className="fa-solid fa-briefcase text-xl text-yellow-400"></i>
-                         <h3 className="text-lg font-semibold mt-1">职业方向</h3>
+             {isPaid ? (
+               <div className="mb-10">
+                 <h2 className="text-2xl font-bold mb-4 flex items-center">
+                   <i className="fa-solid fa-lightbulb text-yellow-400 mr-3"></i>建议和启示
+                 </h2>
+                 
+                 {/* 生成专业建议 */}
+                 {(() => {
+                   const advice = generateProfessionalAdvice(
+                     basicInfo.gender, 
+                     personality.dominantElement, 
+                     basicInfo.birthDate
+                   );
+                   return (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                       <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
+                         <div className="text-center mb-3">
+                           <i className="fa-solid fa-briefcase text-xl text-yellow-400"></i>
+                           <h3 className="text-lg font-semibold mt-1">职业方向</h3>
+                         </div>
+                          <p className="text-gray-300 text-sm">{advice.career}</p>
                        </div>
-                        <p className="text-gray-300 text-sm">{advice.career}</p>
-                     </div>
-                     
-                     <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
-                       <div className="text-center mb-3">
-                         <i className="fa-solid fa-users text-xl text-yellow-400"></i>
-                         <h3 className="text-lg font-semibold mt-1">人际关系</h3>
+                       
+                       <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
+                         <div className="text-center mb-3">
+                           <i className="fa-solid fa-users text-xl text-yellow-400"></i>
+                           <h3 className="text-lg font-semibold mt-1">人际关系</h3>
+                         </div>
+                          <p className="text-gray-300 text-sm">{advice.relationship}</p>
                        </div>
-                        <p className="text-gray-300 text-sm">{advice.relationship}</p>
-                     </div>
-                     
-                     <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
-                       <div className="text-center mb-3">
-                         <i className="fa-solid fa-heartbeat text-xl text-yellow-400"></i>
-                         <h3 className="text-lg font-semibold mt-1">健康养生</h3>
+                       
+                       <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 hover:border-yellow-500/50 transition-all duration-300 transform hover:-translate-y-1">
+                         <div className="text-center mb-3">
+                           <i className="fa-solid fa-heartbeat text-xl text-yellow-400"></i>
+                           <h3 className="text-lg font-semibold mt-1">健康养生</h3>
+                         </div>
+                          <p className="text-gray-300 text-sm">{advice.health}</p>
                        </div>
-                        <p className="text-gray-300 text-sm">{advice.health}</p>
                      </div>
-                   </div>
-                 );
-               })()}
-               
-               {/* 特别启示 */}
-               <div className="mt-6 bg-gradient-to-r from-yellow-900/30 to-red-900/30 border border-yellow-800/50 rounded-lg p-4 hover:shadow-lg hover:shadow-yellow-500/10 transition-all duration-300">
-                 <h3 className="text-lg font-semibold mb-2 text-yellow-300 flex items-center">
-                   <i className="fa-solid fa-star mr-2"></i>特别启示
-                 </h3>
-                 <p className="text-yellow-200">
-                   {generateSpecialInsights(
-                     basicInfo.birthDate, 
-                     basicInfo.birthHour, 
-                     personality.dominantElement
-                   )}
-                 </p>
+                   );
+                 })()}
+                 
+                 {/* 特别启示 */}
+                 <div className="mt-6 bg-gradient-to-r from-yellow-900/30 to-red-900/30 border border-yellow-800/50 rounded-lg p-4 hover:shadow-lg hover:shadow-yellow-500/10 transition-all duration-300">
+                   <h3 className="text-lg font-semibold mb-2 text-yellow-300 flex items-center">
+                     <i className="fa-solid fa-star mr-2"></i>特别启示
+                   </h3>
+                   <p className="text-yellow-200">
+                     {generateSpecialInsights(
+                       basicInfo.birthDate, 
+                       basicInfo.birthHour, 
+                       personality.dominantElement
+                     )}
+                   </p>
+                 </div>
                </div>
+             ) : (
+               <div className="mb-10">
+                 <h2 className="text-2xl font-bold mb-4 flex items-center">
+                   <i className="fa-solid fa-lightbulb text-yellow-400 mr-3"></i>建议和启示
+                 </h2>
+                 <div className="bg-gray-700/30 border border-gray-600 rounded-lg p-4 text-gray-300">
+                   <div className="text-center py-6">
+                     <div className="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                       <i className="fa-solid fa-lock text-lg text-yellow-400"></i>
+                     </div>
+                     <p className="text-gray-400">付费后可查看专业的建议和启示</p>
+                   </div>
+                 </div>
+               </div>
+             )}
             </div>
             
             {/* 免责声明 */}
@@ -260,6 +323,9 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
           </div>
         </div>
       </div>
+      
+      {/* 支付模态框 */}
+      <PaymentModal />
     </div>
   );
 }
