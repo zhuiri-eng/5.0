@@ -23,7 +23,8 @@ export default function Home() {
           
           <Link 
             to="/report-form"
-            className="w-full bg-gradient-to-r from-red-600 to-yellow-500 hover:from-red-700 hover:to-yellow-600 text-white font-medium py-3 px-6 rounded-full transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 flex items-center justify-center gap-2"
+            className="w-full bg-gradient-to-r from-red-600 to-yellow-500 hover:from-red-700 hover:to-yellow-600 active:from-red-800 active:to-yellow-700 text-white font-medium py-4 px-6 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-800 flex items-center justify-center gap-2 touch-manipulation"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
           >
             <span>生成命理报告</span>
             <i className="fa-solid fa-arrow-right"></i>

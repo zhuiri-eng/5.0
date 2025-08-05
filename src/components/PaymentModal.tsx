@@ -72,14 +72,15 @@ const PaymentModal: React.FC = () => {
           <h3 className="text-white font-semibold mb-3">选择支付方式</h3>
           <div className="space-y-2">
             {paymentMethods.map((method) => (
-              <label
-                key={method.id}
-                className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                  selectedPayment === method.id
-                    ? 'border-yellow-500 bg-yellow-500/10'
-                    : 'border-gray-600 bg-gray-700/30 hover:border-gray-500'
-                }`}
-              >
+                             <label
+                 key={method.id}
+                 className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all touch-manipulation ${
+                   selectedPayment === method.id
+                     ? 'border-yellow-500 bg-yellow-500/10'
+                     : 'border-gray-600 bg-gray-700/30 hover:border-gray-500 active:border-gray-400'
+                 }`}
+                 style={{ WebkitTapHighlightColor: 'transparent' }}
+               >
                 <input
                   type="radio"
                   name="payment"
@@ -99,15 +100,16 @@ const PaymentModal: React.FC = () => {
         </div>
 
         <div className="space-y-3">
-          <button
-            onClick={handlePaymentClick}
-            disabled={loading}
-            className={`w-full py-3 px-6 rounded-lg font-semibold transition-all duration-200 ${
-              loading 
-                ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
-                : 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white shadow-lg hover:shadow-xl'
-            }`}
-          >
+                     <button
+             onClick={handlePaymentClick}
+             disabled={loading}
+             className={`w-full py-4 px-6 rounded-lg font-semibold transition-all duration-200 touch-manipulation ${
+               loading 
+                 ? 'bg-gray-600 text-gray-400 cursor-not-allowed' 
+                 : 'bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 active:from-yellow-600 active:to-orange-600 text-white shadow-lg hover:shadow-xl active:scale-95'
+             }`}
+             style={{ WebkitTapHighlightColor: 'transparent' }}
+           >
             {loading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
