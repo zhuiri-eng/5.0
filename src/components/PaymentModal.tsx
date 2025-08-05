@@ -47,24 +47,28 @@ const PaymentModal: React.FC = () => {
             <span className="text-2xl font-bold text-yellow-400">¥{paymentAmount}</span>
           </div>
           
-          <div className="space-y-2 text-sm text-gray-400">
-            <div className="flex items-center">
-              <i className="fa-solid fa-check text-green-400 mr-2"></i>
-              <span>完整五行旺衰分析</span>
-            </div>
-            <div className="flex items-center">
-              <i className="fa-solid fa-check text-green-400 mr-2"></i>
-              <span>详细性格特质解读</span>
-            </div>
-            <div className="flex items-center">
-              <i className="fa-solid fa-check text-green-400 mr-2"></i>
-              <span>运势展望与建议</span>
-            </div>
-            <div className="flex items-center">
-              <i className="fa-solid fa-check text-green-400 mr-2"></i>
-              <span>专业命理指导</span>
-            </div>
-          </div>
+                                <div className="space-y-2 text-sm text-gray-400">
+                        <div className="flex items-center">
+                          <i className="fa-solid fa-check text-green-400 mr-2"></i>
+                          <span>完整五行旺衰分析</span>
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fa-solid fa-check text-green-400 mr-2"></i>
+                          <span>详细性格特质解读</span>
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fa-solid fa-check text-green-400 mr-2"></i>
+                          <span>运势展望与建议</span>
+                        </div>
+                        <div className="flex items-center">
+                          <i className="fa-solid fa-check text-green-400 mr-2"></i>
+                          <span>专业命理指导</span>
+                        </div>
+                        <div className="flex items-center mt-3 pt-3 border-t border-gray-600">
+                          <i className="fa-solid fa-info-circle text-blue-400 mr-2"></i>
+                          <span className="text-blue-400 font-medium">每次付费可查询1次报告</span>
+                        </div>
+                      </div>
         </div>
 
         {/* 支付方式选择 */}

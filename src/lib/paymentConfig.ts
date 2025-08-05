@@ -1,10 +1,10 @@
 // ========================================
-// 码支付配置
+// 码支付配置 - 基于官方配置
 // ========================================
 
 // 基础配置
 const BASE_CONFIG = {
-  // 码支付平台配置
+  // 码支付平台配置（来自官方截图）
   PID: '145297917',
   KEY: '677g7etdq4GTqFB11e6bah1aEh1AbBmb',
   API_URL: 'https://pay.payma.cn/',
@@ -13,6 +13,9 @@ const BASE_CONFIG = {
   PRODUCT_NAME: '玄学命理报告',
   SITE_NAME: '玄学命理分析平台',
   PRICE: 19.9,
+  
+  // 查询限制配置
+  MAX_QUERIES_PER_PAYMENT: 1, // 每次付费只能查询1次
 };
 
 // 回调地址配置
@@ -51,6 +54,77 @@ export const PAYMENT_CONFIG = {
   ...BASE_CONFIG,
   ...getCallbackUrls(),
   PAYMENT_METHODS
+};
+
+// ========================================
+// 查询状态管理
+// ========================================
+
+// 查询状态接口
+export interface QueryStatus {
+  isPaid: boolean;
+  remainingQueries: number;
+  lastPaymentTime?: number;
+  orderId?: string;
+}
+
+/**
+ * 获取查询状态
+ */
+export const getQueryStatus = (): QueryStatus => {
+  const status = localStorage.getItem('metaphysics_query_status');
+  if (status) {
+    return JSON.parse(status);
+  }
+  return {
+    isPaid: false,
+    remainingQueries: 0
+  };
+};
+
+/**
+ * 更新查询状态
+ */
+export const updateQueryStatus = (status: Partial<QueryStatus>) => {
+  const currentStatus = getQueryStatus();
+  const newStatus = { ...currentStatus, ...status };
+  localStorage.setItem('metaphysics_query_status', JSON.stringify(newStatus));
+  return newStatus;
+};
+
+/**
+ * 检查是否可以查询
+ */
+export const canQuery = (): boolean => {
+  const status = getQueryStatus();
+  return status.isPaid && status.remainingQueries > 0;
+};
+
+/**
+ * 使用一次查询
+ */
+export const useQuery = (): boolean => {
+  const status = getQueryStatus();
+  if (status.remainingQueries > 0) {
+    updateQueryStatus({
+      remainingQueries: status.remainingQueries - 1,
+      isPaid: status.remainingQueries - 1 > 0
+    });
+    return true;
+  }
+  return false;
+};
+
+/**
+ * 重置查询状态（支付成功后调用）
+ */
+export const resetQueryStatus = (orderId: string) => {
+  updateQueryStatus({
+    isPaid: true,
+    remainingQueries: BASE_CONFIG.MAX_QUERIES_PER_PAYMENT,
+    lastPaymentTime: Date.now(),
+    orderId
+  });
 };
 
 // ========================================

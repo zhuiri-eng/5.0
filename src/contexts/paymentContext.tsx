@@ -1,5 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { PAYMENT_CONFIG, generateOrderId, buildPaymentUrl } from '@/lib/paymentConfig';
+import { 
+  PAYMENT_CONFIG, 
+  generateOrderId, 
+  buildPaymentUrl,
+  getQueryStatus,
+  updateQueryStatus,
+  canQuery,
+  useQuery,
+  resetQueryStatus,
+  QueryStatus
+} from '@/lib/paymentConfig';
 
 interface PaymentContextType {
   isPaid: boolean;
@@ -11,6 +21,10 @@ interface PaymentContextType {
   loading: boolean;
   paymentUrl: string | null;
   setPaymentUrl: (url: string | null) => void;
+  queryStatus: QueryStatus;
+  canQuery: () => boolean;
+  useQuery: () => boolean;
+  remainingQueries: number;
 }
 
 const PaymentContext = createContext<PaymentContextType | undefined>(undefined);
@@ -32,14 +46,14 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
+  const [queryStatus, setQueryStatus] = useState<QueryStatus>(getQueryStatus());
   const paymentAmount = PAYMENT_CONFIG.PRICE; // 设置支付金额
 
-  // 从localStorage检查付费状态
+  // 从localStorage检查查询状态
   useEffect(() => {
-    const paidStatus = localStorage.getItem('metaphysics_paid');
-    if (paidStatus === 'true') {
-      setIsPaid(true);
-    }
+    const status = getQueryStatus();
+    setQueryStatus(status);
+    setIsPaid(status.isPaid);
   }, []);
 
   const handlePayment = async (paymentType: 'alipay' | 'wechat' | 'qq'): Promise<boolean> => {
@@ -87,11 +101,16 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
           // 模拟支付成功（实际项目中应该调用API查询）
           if (Date.now() - order.timestamp > 30000) { // 30秒后模拟支付成功
             clearInterval(checkInterval);
+            
+            // 重置查询状态
+            resetQueryStatus(orderId);
+            const newStatus = getQueryStatus();
+            setQueryStatus(newStatus);
             setIsPaid(true);
-            localStorage.setItem('metaphysics_paid', 'true');
+            
             localStorage.removeItem('current_order');
             setShowPaymentModal(false);
-            alert('支付成功！您现在可以查看完整报告了。');
+            alert('支付成功！您现在可以查询一次玄学命理报告。');
           }
         }
       } catch (error) {
@@ -114,7 +133,11 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
     setShowPaymentModal,
     loading,
     paymentUrl,
-    setPaymentUrl
+    setPaymentUrl,
+    queryStatus,
+    canQuery,
+    useQuery,
+    remainingQueries: queryStatus.remainingQueries
   };
 
   return (
