@@ -181,10 +181,7 @@ export default function MetaphysicsReport({ reportData }: MetaphysicsReportProps
                       <h3 className="text-xl font-semibold text-white mb-2">解锁完整报告</h3>
                       <p className="text-gray-400 mb-4">您当前只能查看基础信息，付费后可查看详细的运势展望、专业建议等完整内容</p>
                       <button
-                        onClick={() => {
-                          const { setShowPaymentModal } = usePayment();
-                          setShowPaymentModal(true);
-                        }}
+                        onClick={() => setShowPaymentModal(true)}
                         className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-400 hover:to-orange-400 text-white px-6 py-2 rounded-lg font-medium transition-all duration-200"
                       >
                         <i className="fa-solid fa-crown mr-2"></i>
