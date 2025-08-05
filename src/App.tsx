@@ -4,6 +4,7 @@ import ReportForm from "@/pages/ReportForm";
 import { generateMetaphysicsReport } from "@/lib/metaphysics";
 import MetaphysicsReport from "@/pages/MetaphysicsReport";
 import PaymentSuccess from "@/pages/PaymentSuccess";
+import PaymentTest from "@/pages/PaymentTest";
 import { useState } from "react";
 import { AuthContext } from '@/contexts/authContext';
 import { PaymentProvider } from '@/contexts/paymentContext';
@@ -38,6 +39,7 @@ export default function App() {
           <Route path="/report-form" element={<ReportForm generateReport={generateReport} />} />
           <Route path="/metaphysics-report" element={<MetaphysicsReport reportData={reportData} />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-test" element={<PaymentTest />} />
           <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
         </Routes>
       </PaymentProvider>
