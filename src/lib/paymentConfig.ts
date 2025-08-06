@@ -20,10 +20,9 @@ const BASE_CONFIG = {
 
 // 回调地址配置
 const getCallbackUrls = () => {
-  const origin = window.location.origin;
   return {
-    NOTIFY_URL: `${origin}/api/payment/notify`,
-    RETURN_URL: `${origin}/payment-success`,
+    NOTIFY_URL: 'https://www.cccyun.cc/notify_url.php',
+    RETURN_URL: 'https://www.cccyun.cc/return_url.php',
   };
 };
 
