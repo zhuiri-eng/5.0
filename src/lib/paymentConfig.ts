@@ -1,13 +1,13 @@
 // ========================================
-// 码支付配置 - 基于官方配置
+// 易支付配置 - 基于新接口配置
 // ========================================
 
 // 基础配置
 const BASE_CONFIG = {
-  // 码支付平台配置（来自官方截图）
-  PID: '145297917',
-  KEY: '677g7etdq4GTqFB11e6bah1aEh1AbBmb',
-  API_URL: 'https://pay.payma.cn/',
+  // 易支付平台配置
+  PID: '1000',
+  KEY: '1cepbt1wHFN83OrrDsrlaWvOcwrteZlD',
+  API_URL: 'https://sta.qijiuwang.top/',
   
   // 商品信息
   PRODUCT_NAME: '玄学命理报告',
@@ -142,7 +142,7 @@ export const generateOrderId = (): string => {
 
 /**
  * 生成签名字符串
- * 按照码支付API要求排序参数并拼接
+ * 按照易支付API要求排序参数并拼接
  */
 export const generateSign = (params: Record<string, string>, key: string): string => {
   // 过滤掉空值和sign参数，并按字母顺序排序
@@ -324,7 +324,7 @@ export const md5 = (str: string): string => {
 
 /**
  * 构建支付URL
- * 生成完整的码支付API调用地址
+ * 生成完整的易支付API调用地址
  */
 export const buildPaymentUrl = (
   paymentType: 'alipay' | 'wechat' | 'qq', 
