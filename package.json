@@ -7,13 +7,13 @@
   "main": "index.js",
   "scripts": {
     "dev:client": "vite --host 0.0.0.0 --port 3000 --strictPort",
-    "dev": "pnpm dev:client",
+    "dev": "npm run dev:client",
     "build:client": "vite build --outDir dist/static",
     "build:step1": "node scripts/clean-dist.js",
-    "build:step2": "pnpm run build:client",
+    "build:step2": "npm run build:client",
     "build:step3": "mkdir -p dist && cp package.json dist",
     "build:step4": "touch > dist/build.flag",
-    "build": "pnpm run build:step1 && pnpm run build:step2 && pnpm run build:step3 && pnpm run build:step4",
+    "build": "npm run build:step1 && npm run build:step2 && npm run build:step3 && npm run build:step4",
     "build:netlify": "npm install && vite build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

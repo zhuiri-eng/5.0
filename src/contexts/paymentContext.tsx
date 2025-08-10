@@ -61,17 +61,38 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
     setLoading(true);
     
     try {
-      console.log('开始处理支付，支付类型:', paymentType);
+      console.log('=== 开始处理支付 ===');
+      console.log('支付类型:', paymentType);
+      
+      // 验证支付类型
+      if (!paymentType || !['alipay', 'wechat', 'qq'].includes(paymentType)) {
+        throw new Error('无效的支付类型');
+      }
       
       const orderId = generateOrderId();
       console.log('生成的订单号:', orderId);
       
+      // 验证订单号
+      if (!orderId || orderId.trim() === '') {
+        throw new Error('订单号生成失败');
+      }
+      
       const amount = paymentAmount;
       console.log('支付金额:', amount);
+      
+      // 验证金额
+      if (!amount || amount <= 0) {
+        throw new Error('支付金额无效');
+      }
       
       // 构建支付URL
       const paymentUrl = buildPaymentUrl(paymentType, orderId, amount);
       console.log('构建的支付URL:', paymentUrl);
+      
+      // 验证支付URL
+      if (!paymentUrl || paymentUrl.trim() === '') {
+        throw new Error('支付URL构建失败');
+      }
       
       // 保存订单信息到localStorage
       const orderInfo = {
@@ -90,9 +111,11 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
       // 开始轮询检查支付状态
       checkPaymentStatus(orderId);
       
+      console.log('=== 支付处理完成 ===');
       return true;
     } catch (error) {
       console.error('支付失败:', error);
+      alert(`支付失败: ${error instanceof Error ? error.message : '未知错误'}`);
       return false;
     } finally {
       setLoading(false);
