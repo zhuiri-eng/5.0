@@ -21,8 +21,8 @@ const BASE_CONFIG = {
 // 回调地址配置
 const getCallbackUrls = () => {
   return {
-    NOTIFY_URL: 'https://www.cccyun.cc/notify_url.php',
-    RETURN_URL: 'https://www.cccyun.cc/return_url.php',
+    NOTIFY_URL: 'https://sta.qijiuwang.top/notify_url.php',
+    RETURN_URL: 'https://sta.qijiuwang.top/return_url.php',
   };
 };
 
