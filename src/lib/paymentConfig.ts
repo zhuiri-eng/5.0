@@ -132,7 +132,14 @@ export const resetQueryStatus = (orderId: string) => {
 export const generateOrderId = (): string => {
   const timestamp = Date.now();
   const random = Math.floor(Math.random() * 1000);
-  return `MF${timestamp}${random}`;
+  const orderId = `MF${timestamp}${random}`;
+  
+  console.log('generateOrderId 被调用');
+  console.log('时间戳:', timestamp);
+  console.log('随机数:', random);
+  console.log('生成的订单号:', orderId);
+  
+  return orderId;
 };
 
 /**
@@ -326,6 +333,8 @@ export const buildPaymentUrl = (
   orderId: string, 
   amount: number
 ): string => {
+  console.log('buildPaymentUrl 被调用，参数:', { paymentType, orderId, amount });
+  
   // 构建支付参数 - 按照易支付标准顺序
   const paymentParams: Record<string, string> = {
     pid: BASE_CONFIG.PID,
@@ -338,10 +347,15 @@ export const buildPaymentUrl = (
     sitename: BASE_CONFIG.SITE_NAME,
     clientip: '127.0.0.1'
   };
+  
+  console.log('构建的支付参数:', paymentParams);
 
   // 生成签名
   const signStr = generateSign(paymentParams, BASE_CONFIG.KEY);
+  console.log('生成的签名字符串:', signStr);
+  
   const sign = md5(signStr).toUpperCase();
+  console.log('生成的MD5签名:', sign);
   
   // 构建完整URL - 确保参数顺序一致
   const params = new URLSearchParams();
@@ -350,11 +364,16 @@ export const buildPaymentUrl = (
   orderedKeys.forEach(key => {
     if (paymentParams[key]) {
       params.append(key, paymentParams[key]);
+      console.log(`添加参数 ${key}: ${paymentParams[key]}`);
     }
   });
   params.append('sign', sign);
+  console.log('添加签名参数:', sign);
 
-  return `${BASE_CONFIG.API_URL}submit.php?${params.toString()}`;
+  const finalUrl = `${BASE_CONFIG.API_URL}submit.php?${params.toString()}`;
+  console.log('最终生成的支付URL:', finalUrl);
+  
+  return finalUrl;
 };
 
 // ========================================

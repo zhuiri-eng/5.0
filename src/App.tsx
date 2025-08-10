@@ -7,6 +7,7 @@ import PaymentSuccess from "@/pages/PaymentSuccess";
 import PaymentTest from "@/pages/PaymentTest";
 import PaymentDebug from "@/pages/PaymentDebug";
 import TestPage from "@/pages/TestPage";
+import TestOrderId from "@/pages/TestOrderId";
 import { useState } from "react";
 import { AuthContext } from '@/contexts/authContext';
 import { PaymentProvider } from '@/contexts/paymentContext';
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/payment-test" element={<PaymentTest />} />
           <Route path="/payment-debug" element={<PaymentDebug />} />
           <Route path="/test" element={<TestPage />} />
+          <Route path="/test-order-id" element={<TestOrderId />} />
           <Route path="/other" element={<div className="text-center text-xl">Other Page - Coming Soon</div>} />
         </Routes>
       </PaymentProvider>

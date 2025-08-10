@@ -61,19 +61,28 @@ export const PaymentProvider: React.FC<PaymentProviderProps> = ({ children }) =>
     setLoading(true);
     
     try {
+      console.log('开始处理支付，支付类型:', paymentType);
+      
       const orderId = generateOrderId();
+      console.log('生成的订单号:', orderId);
+      
       const amount = paymentAmount;
+      console.log('支付金额:', amount);
       
       // 构建支付URL
       const paymentUrl = buildPaymentUrl(paymentType, orderId, amount);
+      console.log('构建的支付URL:', paymentUrl);
       
       // 保存订单信息到localStorage
-      localStorage.setItem('current_order', JSON.stringify({
+      const orderInfo = {
         orderId,
         amount,
         paymentType,
         timestamp: Date.now()
-      }));
+      };
+      console.log('保存的订单信息:', orderInfo);
+      
+      localStorage.setItem('current_order', JSON.stringify(orderInfo));
 
       // 打开支付页面
       window.open(paymentUrl, '_blank');
