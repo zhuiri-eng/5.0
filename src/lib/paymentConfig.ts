@@ -3,19 +3,14 @@
 // ========================================
 
 // 基础配置
-const BASE_CONFIG = {
-  // 易支付平台配置
-  PID: '1000',
-  KEY: '1cepbt1wHFN83OrrDsrlaWvOcwrteZlD',
-  API_URL: 'https://sta.qijiuwang.top/',
-  
-  // 商品信息
-  PRODUCT_NAME: '玄学命理报告',
-  SITE_NAME: '玄学命理分析平台',
-  PRICE: 19.9,
-  
-  // 查询限制配置
-  MAX_QUERIES_PER_PAYMENT: 1, // 每次付费只能查询1次
+export const BASE_CONFIG = {
+  PID: '1003', // 商户ID
+  KEY: '5Kp6CsNnpirNdvFzDBgy47yYKL9CdiH2', // 商户密钥
+  API_URL: 'https://sta.qijiuwang.top/', // 易支付接口地址
+  PRODUCT_NAME: '命理报告完整版', // 商品名称
+  SITE_NAME: '命理分析', // 网站名称
+  PRICE: 19.9, // 价格（元）
+  MAX_QUERIES_PER_PAYMENT: 1 // 每次付费可查询次数
 };
 
 // 回调地址配置
