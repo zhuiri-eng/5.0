@@ -147,9 +147,9 @@ export const generateOrderId = (): string => {
 export const generateSign = (params: Record<string, string>, key: string): string => {
   // 过滤掉空值和sign参数，并按字母顺序排序
   const filteredParams: Record<string, string> = {};
-  Object.keys(params).forEach(key => {
-    if (key !== 'sign' && params[key] !== '' && params[key] !== null && params[key] !== undefined) {
-      filteredParams[key] = params[key];
+  Object.keys(params).forEach(paramKey => {
+    if (paramKey !== 'sign' && params[paramKey] !== '' && params[paramKey] !== null && params[paramKey] !== undefined) {
+      filteredParams[paramKey] = params[paramKey];
     }
   });
   
@@ -331,26 +331,31 @@ export const buildPaymentUrl = (
   orderId: string, 
   amount: number
 ): string => {
-  // 构建支付参数
+  // 构建支付参数 - 按照易支付标准顺序
   const paymentParams: Record<string, string> = {
     pid: BASE_CONFIG.PID,
     type: paymentType,
-    out_trade_no: orderId,
+    trade_no: orderId,
     notify_url: getCallbackUrls().NOTIFY_URL,
     return_url: getCallbackUrls().RETURN_URL,
     name: BASE_CONFIG.PRODUCT_NAME,
     money: amount.toFixed(2),
-    sitename: BASE_CONFIG.SITE_NAME
+    sitename: BASE_CONFIG.SITE_NAME,
+    clientip: '127.0.0.1'
   };
 
   // 生成签名
   const signStr = generateSign(paymentParams, BASE_CONFIG.KEY);
   const sign = md5(signStr).toUpperCase();
   
-  // 构建完整URL
+  // 构建完整URL - 确保参数顺序一致
   const params = new URLSearchParams();
-  Object.keys(paymentParams).forEach(key => {
-    params.append(key, paymentParams[key]);
+  // 按照易支付要求的顺序添加参数
+  const orderedKeys = ['pid', 'type', 'trade_no', 'notify_url', 'return_url', 'name', 'money', 'sitename', 'clientip'];
+  orderedKeys.forEach(key => {
+    if (paymentParams[key]) {
+      params.append(key, paymentParams[key]);
+    }
   });
   params.append('sign', sign);
 
@@ -374,21 +379,26 @@ export const debugPaymentParams = (
   const paymentParams: Record<string, string> = {
     pid: BASE_CONFIG.PID,
     type: paymentType,
-    out_trade_no: orderId,
+    trade_no: orderId,
     notify_url: getCallbackUrls().NOTIFY_URL,
     return_url: getCallbackUrls().RETURN_URL,
     name: BASE_CONFIG.PRODUCT_NAME,
     money: amount.toFixed(2),
-    sitename: BASE_CONFIG.SITE_NAME
+    sitename: BASE_CONFIG.SITE_NAME,
+    clientip: '127.0.0.1'
   };
 
   const signStr = generateSign(paymentParams, BASE_CONFIG.KEY);
   const sign = md5(signStr).toUpperCase();
 
-  // 构建完整URL
+  // 构建完整URL - 确保参数顺序一致
   const params = new URLSearchParams();
-  Object.keys(paymentParams).forEach(key => {
-    params.append(key, paymentParams[key]);
+  // 按照易支付要求的顺序添加参数
+  const orderedKeys = ['pid', 'type', 'trade_no', 'notify_url', 'return_url', 'name', 'money', 'sitename', 'clientip'];
+  orderedKeys.forEach(key => {
+    if (paymentParams[key]) {
+      params.append(key, paymentParams[key]);
+    }
   });
   params.append('sign', sign);
 
